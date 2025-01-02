@@ -1,0 +1,3 @@
+﻿  CompositeConcrete.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\optional(12): warning STL4038: The contents of <optional> are available only with C++17 or later.
+  MINIC.vcxproj -> C:\Users\vasil\OneDrive\Υπολογιστής\MINIC\MINIC-master\x64\Debug\MINIC.exe

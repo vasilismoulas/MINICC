@@ -1,0 +1,1556 @@
+Grammar
+
+    0 $accept: compile_unit $end
+
+    1 compile_unit: statement
+    2             | compile_unit statement
+    3             | function_definition
+    4             | compile_unit function_definition
+
+    5 function_definition: FUNCTION IDENTIFIER '(' fargs ')' compound_statement
+    6                    | FUNCTION IDENTIFIER '(' ')' compound_statement
+
+    7 fargs: IDENTIFIER
+    8      | fargs ',' IDENTIFIER
+
+    9 statement: expression ';'
+   10          | compound_statement
+   11          | if_statement
+   12          | while_statement
+   13          | RETURN expression ';'
+   14          | BREAK ';'
+   15          | ';'
+
+   16 if_statement: IF '(' expression ')' statement
+   17             | IF '(' expression ')' statement ELSE statement
+
+   18 while_statement: WHILE '(' expression ')' statement
+
+   19 compound_statement: '{' '}'
+   20                   | '{' statement_list '}'
+
+   21 statement_list: statement
+   22               | statement_list statement
+
+   23 expression: NUMBER
+   24           | IDENTIFIER
+   25           | IDENTIFIER '(' ')'
+   26           | IDENTIFIER '(' args ')'
+   27           | expression PLUS expression
+   28           | expression MINUS expression
+   29           | expression MULT expression
+   30           | expression DIV expression
+   31           | PLUS expression
+   32           | MINUS expression
+   33           | '(' expression ')'
+   34           | IDENTIFIER '=' expression
+   35           | expression AND expression
+   36           | expression OR expression
+   37           | NOT expression
+   38           | expression GT expression
+   39           | expression GTE expression
+   40           | expression LT expression
+   41           | expression LTE expression
+   42           | expression EQUAL expression
+   43           | expression NEQUAL expression
+
+   44 args: expression
+   45     | args ',' expression
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 5 6 16 17 18 25 26 33
+')' (41) 5 6 16 17 18 25 26 33
+',' (44) 8 45
+';' (59) 9 13 14 15
+'=' (61) 34
+'{' (123) 19 20
+'}' (125) 19 20
+error (256)
+IDENTIFIER (258) 5 6 7 8 24 25 26 34
+NUMBER (259) 23
+RETURN (260) 13
+BREAK (261) 14
+IF (262) 16 17
+ELSE (263) 17
+WHILE (264) 18
+FUNCTION (265) 5 6
+IFPREC (266)
+OR (267) 36
+AND (268) 35
+NEQUAL (269) 43
+EQUAL (270) 42
+LT (271) 40
+LTE (272) 41
+GT (273) 38
+GTE (274) 39
+MINUS (275) 28 32
+PLUS (276) 27 31
+DIV (277) 30
+MULT (278) 29
+NOT (279) 37
+
+
+Nonterminals, with rules where they appear
+
+$accept (32)
+    on left: 0
+compile_unit (33)
+    on left: 1 2 3 4, on right: 0 2 4
+function_definition (34)
+    on left: 5 6, on right: 3 4
+fargs (35)
+    on left: 7 8, on right: 5 8
+statement (36)
+    on left: 9 10 11 12 13 14 15, on right: 1 2 16 17 18 21 22
+if_statement (37)
+    on left: 16 17, on right: 11
+while_statement (38)
+    on left: 18, on right: 12
+compound_statement (39)
+    on left: 19 20, on right: 5 6 10
+statement_list (40)
+    on left: 21 22, on right: 20 22
+expression (41)
+    on left: 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40
+    41 42 43, on right: 9 13 16 17 18 27 28 29 30 31 32 33 34 35 36
+    37 38 39 40 41 42 43 44 45
+args (42)
+    on left: 44 45, on right: 26 45
+
+
+State 0
+
+    0 $accept: . compile_unit $end
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    RETURN      shift, and go to state 3
+    BREAK       shift, and go to state 4
+    IF          shift, and go to state 5
+    WHILE       shift, and go to state 6
+    FUNCTION    shift, and go to state 7
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+    ';'         shift, and go to state 12
+    '{'         shift, and go to state 13
+
+    compile_unit         go to state 14
+    function_definition  go to state 15
+    statement            go to state 16
+    if_statement         go to state 17
+    while_statement      go to state 18
+    compound_statement   go to state 19
+    expression           go to state 20
+
+
+State 1
+
+   24 expression: IDENTIFIER .
+   25           | IDENTIFIER . '(' ')'
+   26           | IDENTIFIER . '(' args ')'
+   34           | IDENTIFIER . '=' expression
+
+    '='  shift, and go to state 21
+    '('  shift, and go to state 22
+
+    $default  reduce using rule 24 (expression)
+
+
+State 2
+
+   23 expression: NUMBER .
+
+    $default  reduce using rule 23 (expression)
+
+
+State 3
+
+   13 statement: RETURN . expression ';'
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+
+    expression  go to state 23
+
+
+State 4
+
+   14 statement: BREAK . ';'
+
+    ';'  shift, and go to state 24
+
+
+State 5
+
+   16 if_statement: IF . '(' expression ')' statement
+   17             | IF . '(' expression ')' statement ELSE statement
+
+    '('  shift, and go to state 25
+
+
+State 6
+
+   18 while_statement: WHILE . '(' expression ')' statement
+
+    '('  shift, and go to state 26
+
+
+State 7
+
+    5 function_definition: FUNCTION . IDENTIFIER '(' fargs ')' compound_statement
+    6                    | FUNCTION . IDENTIFIER '(' ')' compound_statement
+
+    IDENTIFIER  shift, and go to state 27
+
+
+State 8
+
+   32 expression: MINUS . expression
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+
+    expression  go to state 28
+
+
+State 9
+
+   31 expression: PLUS . expression
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+
+    expression  go to state 29
+
+
+State 10
+
+   37 expression: NOT . expression
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+
+    expression  go to state 30
+
+
+State 11
+
+   33 expression: '(' . expression ')'
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+
+    expression  go to state 31
+
+
+State 12
+
+   15 statement: ';' .
+
+    $default  reduce using rule 15 (statement)
+
+
+State 13
+
+   19 compound_statement: '{' . '}'
+   20                   | '{' . statement_list '}'
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    RETURN      shift, and go to state 3
+    BREAK       shift, and go to state 4
+    IF          shift, and go to state 5
+    WHILE       shift, and go to state 6
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+    ';'         shift, and go to state 12
+    '{'         shift, and go to state 13
+    '}'         shift, and go to state 32
+
+    statement           go to state 33
+    if_statement        go to state 17
+    while_statement     go to state 18
+    compound_statement  go to state 19
+    statement_list      go to state 34
+    expression          go to state 20
+
+
+State 14
+
+    0 $accept: compile_unit . $end
+    2 compile_unit: compile_unit . statement
+    4             | compile_unit . function_definition
+
+    $end        shift, and go to state 35
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    RETURN      shift, and go to state 3
+    BREAK       shift, and go to state 4
+    IF          shift, and go to state 5
+    WHILE       shift, and go to state 6
+    FUNCTION    shift, and go to state 7
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+    ';'         shift, and go to state 12
+    '{'         shift, and go to state 13
+
+    function_definition  go to state 36
+    statement            go to state 37
+    if_statement         go to state 17
+    while_statement      go to state 18
+    compound_statement   go to state 19
+    expression           go to state 20
+
+
+State 15
+
+    3 compile_unit: function_definition .
+
+    $default  reduce using rule 3 (compile_unit)
+
+
+State 16
+
+    1 compile_unit: statement .
+
+    $default  reduce using rule 1 (compile_unit)
+
+
+State 17
+
+   11 statement: if_statement .
+
+    $default  reduce using rule 11 (statement)
+
+
+State 18
+
+   12 statement: while_statement .
+
+    $default  reduce using rule 12 (statement)
+
+
+State 19
+
+   10 statement: compound_statement .
+
+    $default  reduce using rule 10 (statement)
+
+
+State 20
+
+    9 statement: expression . ';'
+   27 expression: expression . PLUS expression
+   28           | expression . MINUS expression
+   29           | expression . MULT expression
+   30           | expression . DIV expression
+   35           | expression . AND expression
+   36           | expression . OR expression
+   38           | expression . GT expression
+   39           | expression . GTE expression
+   40           | expression . LT expression
+   41           | expression . LTE expression
+   42           | expression . EQUAL expression
+   43           | expression . NEQUAL expression
+
+    OR      shift, and go to state 38
+    AND     shift, and go to state 39
+    NEQUAL  shift, and go to state 40
+    EQUAL   shift, and go to state 41
+    LT      shift, and go to state 42
+    LTE     shift, and go to state 43
+    GT      shift, and go to state 44
+    GTE     shift, and go to state 45
+    MINUS   shift, and go to state 46
+    PLUS    shift, and go to state 47
+    DIV     shift, and go to state 48
+    MULT    shift, and go to state 49
+    ';'     shift, and go to state 50
+
+
+State 21
+
+   34 expression: IDENTIFIER '=' . expression
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+
+    expression  go to state 51
+
+
+State 22
+
+   25 expression: IDENTIFIER '(' . ')'
+   26           | IDENTIFIER '(' . args ')'
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+    ')'         shift, and go to state 52
+
+    expression  go to state 53
+    args        go to state 54
+
+
+State 23
+
+   13 statement: RETURN expression . ';'
+   27 expression: expression . PLUS expression
+   28           | expression . MINUS expression
+   29           | expression . MULT expression
+   30           | expression . DIV expression
+   35           | expression . AND expression
+   36           | expression . OR expression
+   38           | expression . GT expression
+   39           | expression . GTE expression
+   40           | expression . LT expression
+   41           | expression . LTE expression
+   42           | expression . EQUAL expression
+   43           | expression . NEQUAL expression
+
+    OR      shift, and go to state 38
+    AND     shift, and go to state 39
+    NEQUAL  shift, and go to state 40
+    EQUAL   shift, and go to state 41
+    LT      shift, and go to state 42
+    LTE     shift, and go to state 43
+    GT      shift, and go to state 44
+    GTE     shift, and go to state 45
+    MINUS   shift, and go to state 46
+    PLUS    shift, and go to state 47
+    DIV     shift, and go to state 48
+    MULT    shift, and go to state 49
+    ';'     shift, and go to state 55
+
+
+State 24
+
+   14 statement: BREAK ';' .
+
+    $default  reduce using rule 14 (statement)
+
+
+State 25
+
+   16 if_statement: IF '(' . expression ')' statement
+   17             | IF '(' . expression ')' statement ELSE statement
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+
+    expression  go to state 56
+
+
+State 26
+
+   18 while_statement: WHILE '(' . expression ')' statement
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+
+    expression  go to state 57
+
+
+State 27
+
+    5 function_definition: FUNCTION IDENTIFIER . '(' fargs ')' compound_statement
+    6                    | FUNCTION IDENTIFIER . '(' ')' compound_statement
+
+    '('  shift, and go to state 58
+
+
+State 28
+
+   27 expression: expression . PLUS expression
+   28           | expression . MINUS expression
+   29           | expression . MULT expression
+   30           | expression . DIV expression
+   32           | MINUS expression .
+   35           | expression . AND expression
+   36           | expression . OR expression
+   38           | expression . GT expression
+   39           | expression . GTE expression
+   40           | expression . LT expression
+   41           | expression . LTE expression
+   42           | expression . EQUAL expression
+   43           | expression . NEQUAL expression
+
+    DIV   shift, and go to state 48
+    MULT  shift, and go to state 49
+
+    $default  reduce using rule 32 (expression)
+
+
+State 29
+
+   27 expression: expression . PLUS expression
+   28           | expression . MINUS expression
+   29           | expression . MULT expression
+   30           | expression . DIV expression
+   31           | PLUS expression .
+   35           | expression . AND expression
+   36           | expression . OR expression
+   38           | expression . GT expression
+   39           | expression . GTE expression
+   40           | expression . LT expression
+   41           | expression . LTE expression
+   42           | expression . EQUAL expression
+   43           | expression . NEQUAL expression
+
+    DIV   shift, and go to state 48
+    MULT  shift, and go to state 49
+
+    $default  reduce using rule 31 (expression)
+
+
+State 30
+
+   27 expression: expression . PLUS expression
+   28           | expression . MINUS expression
+   29           | expression . MULT expression
+   30           | expression . DIV expression
+   35           | expression . AND expression
+   36           | expression . OR expression
+   37           | NOT expression .
+   38           | expression . GT expression
+   39           | expression . GTE expression
+   40           | expression . LT expression
+   41           | expression . LTE expression
+   42           | expression . EQUAL expression
+   43           | expression . NEQUAL expression
+
+    $default  reduce using rule 37 (expression)
+
+
+State 31
+
+   27 expression: expression . PLUS expression
+   28           | expression . MINUS expression
+   29           | expression . MULT expression
+   30           | expression . DIV expression
+   33           | '(' expression . ')'
+   35           | expression . AND expression
+   36           | expression . OR expression
+   38           | expression . GT expression
+   39           | expression . GTE expression
+   40           | expression . LT expression
+   41           | expression . LTE expression
+   42           | expression . EQUAL expression
+   43           | expression . NEQUAL expression
+
+    OR      shift, and go to state 38
+    AND     shift, and go to state 39
+    NEQUAL  shift, and go to state 40
+    EQUAL   shift, and go to state 41
+    LT      shift, and go to state 42
+    LTE     shift, and go to state 43
+    GT      shift, and go to state 44
+    GTE     shift, and go to state 45
+    MINUS   shift, and go to state 46
+    PLUS    shift, and go to state 47
+    DIV     shift, and go to state 48
+    MULT    shift, and go to state 49
+    ')'     shift, and go to state 59
+
+
+State 32
+
+   19 compound_statement: '{' '}' .
+
+    $default  reduce using rule 19 (compound_statement)
+
+
+State 33
+
+   21 statement_list: statement .
+
+    $default  reduce using rule 21 (statement_list)
+
+
+State 34
+
+   20 compound_statement: '{' statement_list . '}'
+   22 statement_list: statement_list . statement
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    RETURN      shift, and go to state 3
+    BREAK       shift, and go to state 4
+    IF          shift, and go to state 5
+    WHILE       shift, and go to state 6
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+    ';'         shift, and go to state 12
+    '{'         shift, and go to state 13
+    '}'         shift, and go to state 60
+
+    statement           go to state 61
+    if_statement        go to state 17
+    while_statement     go to state 18
+    compound_statement  go to state 19
+    expression          go to state 20
+
+
+State 35
+
+    0 $accept: compile_unit $end .
+
+    $default  accept
+
+
+State 36
+
+    4 compile_unit: compile_unit function_definition .
+
+    $default  reduce using rule 4 (compile_unit)
+
+
+State 37
+
+    2 compile_unit: compile_unit statement .
+
+    $default  reduce using rule 2 (compile_unit)
+
+
+State 38
+
+   36 expression: expression OR . expression
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+
+    expression  go to state 62
+
+
+State 39
+
+   35 expression: expression AND . expression
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+
+    expression  go to state 63
+
+
+State 40
+
+   43 expression: expression NEQUAL . expression
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+
+    expression  go to state 64
+
+
+State 41
+
+   42 expression: expression EQUAL . expression
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+
+    expression  go to state 65
+
+
+State 42
+
+   40 expression: expression LT . expression
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+
+    expression  go to state 66
+
+
+State 43
+
+   41 expression: expression LTE . expression
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+
+    expression  go to state 67
+
+
+State 44
+
+   38 expression: expression GT . expression
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+
+    expression  go to state 68
+
+
+State 45
+
+   39 expression: expression GTE . expression
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+
+    expression  go to state 69
+
+
+State 46
+
+   28 expression: expression MINUS . expression
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+
+    expression  go to state 70
+
+
+State 47
+
+   27 expression: expression PLUS . expression
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+
+    expression  go to state 71
+
+
+State 48
+
+   30 expression: expression DIV . expression
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+
+    expression  go to state 72
+
+
+State 49
+
+   29 expression: expression MULT . expression
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+
+    expression  go to state 73
+
+
+State 50
+
+    9 statement: expression ';' .
+
+    $default  reduce using rule 9 (statement)
+
+
+State 51
+
+   27 expression: expression . PLUS expression
+   28           | expression . MINUS expression
+   29           | expression . MULT expression
+   30           | expression . DIV expression
+   34           | IDENTIFIER '=' expression .
+   35           | expression . AND expression
+   36           | expression . OR expression
+   38           | expression . GT expression
+   39           | expression . GTE expression
+   40           | expression . LT expression
+   41           | expression . LTE expression
+   42           | expression . EQUAL expression
+   43           | expression . NEQUAL expression
+
+    OR      shift, and go to state 38
+    AND     shift, and go to state 39
+    NEQUAL  shift, and go to state 40
+    EQUAL   shift, and go to state 41
+    LT      shift, and go to state 42
+    LTE     shift, and go to state 43
+    GT      shift, and go to state 44
+    GTE     shift, and go to state 45
+    MINUS   shift, and go to state 46
+    PLUS    shift, and go to state 47
+    DIV     shift, and go to state 48
+    MULT    shift, and go to state 49
+
+    $default  reduce using rule 34 (expression)
+
+
+State 52
+
+   25 expression: IDENTIFIER '(' ')' .
+
+    $default  reduce using rule 25 (expression)
+
+
+State 53
+
+   27 expression: expression . PLUS expression
+   28           | expression . MINUS expression
+   29           | expression . MULT expression
+   30           | expression . DIV expression
+   35           | expression . AND expression
+   36           | expression . OR expression
+   38           | expression . GT expression
+   39           | expression . GTE expression
+   40           | expression . LT expression
+   41           | expression . LTE expression
+   42           | expression . EQUAL expression
+   43           | expression . NEQUAL expression
+   44 args: expression .
+
+    OR      shift, and go to state 38
+    AND     shift, and go to state 39
+    NEQUAL  shift, and go to state 40
+    EQUAL   shift, and go to state 41
+    LT      shift, and go to state 42
+    LTE     shift, and go to state 43
+    GT      shift, and go to state 44
+    GTE     shift, and go to state 45
+    MINUS   shift, and go to state 46
+    PLUS    shift, and go to state 47
+    DIV     shift, and go to state 48
+    MULT    shift, and go to state 49
+
+    $default  reduce using rule 44 (args)
+
+
+State 54
+
+   26 expression: IDENTIFIER '(' args . ')'
+   45 args: args . ',' expression
+
+    ')'  shift, and go to state 74
+    ','  shift, and go to state 75
+
+
+State 55
+
+   13 statement: RETURN expression ';' .
+
+    $default  reduce using rule 13 (statement)
+
+
+State 56
+
+   16 if_statement: IF '(' expression . ')' statement
+   17             | IF '(' expression . ')' statement ELSE statement
+   27 expression: expression . PLUS expression
+   28           | expression . MINUS expression
+   29           | expression . MULT expression
+   30           | expression . DIV expression
+   35           | expression . AND expression
+   36           | expression . OR expression
+   38           | expression . GT expression
+   39           | expression . GTE expression
+   40           | expression . LT expression
+   41           | expression . LTE expression
+   42           | expression . EQUAL expression
+   43           | expression . NEQUAL expression
+
+    OR      shift, and go to state 38
+    AND     shift, and go to state 39
+    NEQUAL  shift, and go to state 40
+    EQUAL   shift, and go to state 41
+    LT      shift, and go to state 42
+    LTE     shift, and go to state 43
+    GT      shift, and go to state 44
+    GTE     shift, and go to state 45
+    MINUS   shift, and go to state 46
+    PLUS    shift, and go to state 47
+    DIV     shift, and go to state 48
+    MULT    shift, and go to state 49
+    ')'     shift, and go to state 76
+
+
+State 57
+
+   18 while_statement: WHILE '(' expression . ')' statement
+   27 expression: expression . PLUS expression
+   28           | expression . MINUS expression
+   29           | expression . MULT expression
+   30           | expression . DIV expression
+   35           | expression . AND expression
+   36           | expression . OR expression
+   38           | expression . GT expression
+   39           | expression . GTE expression
+   40           | expression . LT expression
+   41           | expression . LTE expression
+   42           | expression . EQUAL expression
+   43           | expression . NEQUAL expression
+
+    OR      shift, and go to state 38
+    AND     shift, and go to state 39
+    NEQUAL  shift, and go to state 40
+    EQUAL   shift, and go to state 41
+    LT      shift, and go to state 42
+    LTE     shift, and go to state 43
+    GT      shift, and go to state 44
+    GTE     shift, and go to state 45
+    MINUS   shift, and go to state 46
+    PLUS    shift, and go to state 47
+    DIV     shift, and go to state 48
+    MULT    shift, and go to state 49
+    ')'     shift, and go to state 77
+
+
+State 58
+
+    5 function_definition: FUNCTION IDENTIFIER '(' . fargs ')' compound_statement
+    6                    | FUNCTION IDENTIFIER '(' . ')' compound_statement
+
+    IDENTIFIER  shift, and go to state 78
+    ')'         shift, and go to state 79
+
+    fargs  go to state 80
+
+
+State 59
+
+   33 expression: '(' expression ')' .
+
+    $default  reduce using rule 33 (expression)
+
+
+State 60
+
+   20 compound_statement: '{' statement_list '}' .
+
+    $default  reduce using rule 20 (compound_statement)
+
+
+State 61
+
+   22 statement_list: statement_list statement .
+
+    $default  reduce using rule 22 (statement_list)
+
+
+State 62
+
+   27 expression: expression . PLUS expression
+   28           | expression . MINUS expression
+   29           | expression . MULT expression
+   30           | expression . DIV expression
+   35           | expression . AND expression
+   36           | expression . OR expression
+   36           | expression OR expression .
+   38           | expression . GT expression
+   39           | expression . GTE expression
+   40           | expression . LT expression
+   41           | expression . LTE expression
+   42           | expression . EQUAL expression
+   43           | expression . NEQUAL expression
+
+    AND     shift, and go to state 39
+    NEQUAL  shift, and go to state 40
+    EQUAL   shift, and go to state 41
+    LT      shift, and go to state 42
+    LTE     shift, and go to state 43
+    GT      shift, and go to state 44
+    GTE     shift, and go to state 45
+    MINUS   shift, and go to state 46
+    PLUS    shift, and go to state 47
+    DIV     shift, and go to state 48
+    MULT    shift, and go to state 49
+
+    $default  reduce using rule 36 (expression)
+
+
+State 63
+
+   27 expression: expression . PLUS expression
+   28           | expression . MINUS expression
+   29           | expression . MULT expression
+   30           | expression . DIV expression
+   35           | expression . AND expression
+   35           | expression AND expression .
+   36           | expression . OR expression
+   38           | expression . GT expression
+   39           | expression . GTE expression
+   40           | expression . LT expression
+   41           | expression . LTE expression
+   42           | expression . EQUAL expression
+   43           | expression . NEQUAL expression
+
+    NEQUAL  shift, and go to state 40
+    EQUAL   shift, and go to state 41
+    LT      shift, and go to state 42
+    LTE     shift, and go to state 43
+    GT      shift, and go to state 44
+    GTE     shift, and go to state 45
+    MINUS   shift, and go to state 46
+    PLUS    shift, and go to state 47
+    DIV     shift, and go to state 48
+    MULT    shift, and go to state 49
+
+    $default  reduce using rule 35 (expression)
+
+
+State 64
+
+   27 expression: expression . PLUS expression
+   28           | expression . MINUS expression
+   29           | expression . MULT expression
+   30           | expression . DIV expression
+   35           | expression . AND expression
+   36           | expression . OR expression
+   38           | expression . GT expression
+   39           | expression . GTE expression
+   40           | expression . LT expression
+   41           | expression . LTE expression
+   42           | expression . EQUAL expression
+   43           | expression . NEQUAL expression
+   43           | expression NEQUAL expression .
+
+    MINUS  shift, and go to state 46
+    PLUS   shift, and go to state 47
+    DIV    shift, and go to state 48
+    MULT   shift, and go to state 49
+
+    NEQUAL  error (nonassociative)
+    EQUAL   error (nonassociative)
+    LT      error (nonassociative)
+    LTE     error (nonassociative)
+    GT      error (nonassociative)
+    GTE     error (nonassociative)
+
+    $default  reduce using rule 43 (expression)
+
+
+State 65
+
+   27 expression: expression . PLUS expression
+   28           | expression . MINUS expression
+   29           | expression . MULT expression
+   30           | expression . DIV expression
+   35           | expression . AND expression
+   36           | expression . OR expression
+   38           | expression . GT expression
+   39           | expression . GTE expression
+   40           | expression . LT expression
+   41           | expression . LTE expression
+   42           | expression . EQUAL expression
+   42           | expression EQUAL expression .
+   43           | expression . NEQUAL expression
+
+    MINUS  shift, and go to state 46
+    PLUS   shift, and go to state 47
+    DIV    shift, and go to state 48
+    MULT   shift, and go to state 49
+
+    NEQUAL  error (nonassociative)
+    EQUAL   error (nonassociative)
+    LT      error (nonassociative)
+    LTE     error (nonassociative)
+    GT      error (nonassociative)
+    GTE     error (nonassociative)
+
+    $default  reduce using rule 42 (expression)
+
+
+State 66
+
+   27 expression: expression . PLUS expression
+   28           | expression . MINUS expression
+   29           | expression . MULT expression
+   30           | expression . DIV expression
+   35           | expression . AND expression
+   36           | expression . OR expression
+   38           | expression . GT expression
+   39           | expression . GTE expression
+   40           | expression . LT expression
+   40           | expression LT expression .
+   41           | expression . LTE expression
+   42           | expression . EQUAL expression
+   43           | expression . NEQUAL expression
+
+    MINUS  shift, and go to state 46
+    PLUS   shift, and go to state 47
+    DIV    shift, and go to state 48
+    MULT   shift, and go to state 49
+
+    NEQUAL  error (nonassociative)
+    EQUAL   error (nonassociative)
+    LT      error (nonassociative)
+    LTE     error (nonassociative)
+    GT      error (nonassociative)
+    GTE     error (nonassociative)
+
+    $default  reduce using rule 40 (expression)
+
+
+State 67
+
+   27 expression: expression . PLUS expression
+   28           | expression . MINUS expression
+   29           | expression . MULT expression
+   30           | expression . DIV expression
+   35           | expression . AND expression
+   36           | expression . OR expression
+   38           | expression . GT expression
+   39           | expression . GTE expression
+   40           | expression . LT expression
+   41           | expression . LTE expression
+   41           | expression LTE expression .
+   42           | expression . EQUAL expression
+   43           | expression . NEQUAL expression
+
+    MINUS  shift, and go to state 46
+    PLUS   shift, and go to state 47
+    DIV    shift, and go to state 48
+    MULT   shift, and go to state 49
+
+    NEQUAL  error (nonassociative)
+    EQUAL   error (nonassociative)
+    LT      error (nonassociative)
+    LTE     error (nonassociative)
+    GT      error (nonassociative)
+    GTE     error (nonassociative)
+
+    $default  reduce using rule 41 (expression)
+
+
+State 68
+
+   27 expression: expression . PLUS expression
+   28           | expression . MINUS expression
+   29           | expression . MULT expression
+   30           | expression . DIV expression
+   35           | expression . AND expression
+   36           | expression . OR expression
+   38           | expression . GT expression
+   38           | expression GT expression .
+   39           | expression . GTE expression
+   40           | expression . LT expression
+   41           | expression . LTE expression
+   42           | expression . EQUAL expression
+   43           | expression . NEQUAL expression
+
+    MINUS  shift, and go to state 46
+    PLUS   shift, and go to state 47
+    DIV    shift, and go to state 48
+    MULT   shift, and go to state 49
+
+    NEQUAL  error (nonassociative)
+    EQUAL   error (nonassociative)
+    LT      error (nonassociative)
+    LTE     error (nonassociative)
+    GT      error (nonassociative)
+    GTE     error (nonassociative)
+
+    $default  reduce using rule 38 (expression)
+
+
+State 69
+
+   27 expression: expression . PLUS expression
+   28           | expression . MINUS expression
+   29           | expression . MULT expression
+   30           | expression . DIV expression
+   35           | expression . AND expression
+   36           | expression . OR expression
+   38           | expression . GT expression
+   39           | expression . GTE expression
+   39           | expression GTE expression .
+   40           | expression . LT expression
+   41           | expression . LTE expression
+   42           | expression . EQUAL expression
+   43           | expression . NEQUAL expression
+
+    MINUS  shift, and go to state 46
+    PLUS   shift, and go to state 47
+    DIV    shift, and go to state 48
+    MULT   shift, and go to state 49
+
+    NEQUAL  error (nonassociative)
+    EQUAL   error (nonassociative)
+    LT      error (nonassociative)
+    LTE     error (nonassociative)
+    GT      error (nonassociative)
+    GTE     error (nonassociative)
+
+    $default  reduce using rule 39 (expression)
+
+
+State 70
+
+   27 expression: expression . PLUS expression
+   28           | expression . MINUS expression
+   28           | expression MINUS expression .
+   29           | expression . MULT expression
+   30           | expression . DIV expression
+   35           | expression . AND expression
+   36           | expression . OR expression
+   38           | expression . GT expression
+   39           | expression . GTE expression
+   40           | expression . LT expression
+   41           | expression . LTE expression
+   42           | expression . EQUAL expression
+   43           | expression . NEQUAL expression
+
+    DIV   shift, and go to state 48
+    MULT  shift, and go to state 49
+
+    $default  reduce using rule 28 (expression)
+
+
+State 71
+
+   27 expression: expression . PLUS expression
+   27           | expression PLUS expression .
+   28           | expression . MINUS expression
+   29           | expression . MULT expression
+   30           | expression . DIV expression
+   35           | expression . AND expression
+   36           | expression . OR expression
+   38           | expression . GT expression
+   39           | expression . GTE expression
+   40           | expression . LT expression
+   41           | expression . LTE expression
+   42           | expression . EQUAL expression
+   43           | expression . NEQUAL expression
+
+    DIV   shift, and go to state 48
+    MULT  shift, and go to state 49
+
+    $default  reduce using rule 27 (expression)
+
+
+State 72
+
+   27 expression: expression . PLUS expression
+   28           | expression . MINUS expression
+   29           | expression . MULT expression
+   30           | expression . DIV expression
+   30           | expression DIV expression .
+   35           | expression . AND expression
+   36           | expression . OR expression
+   38           | expression . GT expression
+   39           | expression . GTE expression
+   40           | expression . LT expression
+   41           | expression . LTE expression
+   42           | expression . EQUAL expression
+   43           | expression . NEQUAL expression
+
+    $default  reduce using rule 30 (expression)
+
+
+State 73
+
+   27 expression: expression . PLUS expression
+   28           | expression . MINUS expression
+   29           | expression . MULT expression
+   29           | expression MULT expression .
+   30           | expression . DIV expression
+   35           | expression . AND expression
+   36           | expression . OR expression
+   38           | expression . GT expression
+   39           | expression . GTE expression
+   40           | expression . LT expression
+   41           | expression . LTE expression
+   42           | expression . EQUAL expression
+   43           | expression . NEQUAL expression
+
+    $default  reduce using rule 29 (expression)
+
+
+State 74
+
+   26 expression: IDENTIFIER '(' args ')' .
+
+    $default  reduce using rule 26 (expression)
+
+
+State 75
+
+   45 args: args ',' . expression
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+
+    expression  go to state 81
+
+
+State 76
+
+   16 if_statement: IF '(' expression ')' . statement
+   17             | IF '(' expression ')' . statement ELSE statement
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    RETURN      shift, and go to state 3
+    BREAK       shift, and go to state 4
+    IF          shift, and go to state 5
+    WHILE       shift, and go to state 6
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+    ';'         shift, and go to state 12
+    '{'         shift, and go to state 13
+
+    statement           go to state 82
+    if_statement        go to state 17
+    while_statement     go to state 18
+    compound_statement  go to state 19
+    expression          go to state 20
+
+
+State 77
+
+   18 while_statement: WHILE '(' expression ')' . statement
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    RETURN      shift, and go to state 3
+    BREAK       shift, and go to state 4
+    IF          shift, and go to state 5
+    WHILE       shift, and go to state 6
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+    ';'         shift, and go to state 12
+    '{'         shift, and go to state 13
+
+    statement           go to state 83
+    if_statement        go to state 17
+    while_statement     go to state 18
+    compound_statement  go to state 19
+    expression          go to state 20
+
+
+State 78
+
+    7 fargs: IDENTIFIER .
+
+    $default  reduce using rule 7 (fargs)
+
+
+State 79
+
+    6 function_definition: FUNCTION IDENTIFIER '(' ')' . compound_statement
+
+    '{'  shift, and go to state 13
+
+    compound_statement  go to state 84
+
+
+State 80
+
+    5 function_definition: FUNCTION IDENTIFIER '(' fargs . ')' compound_statement
+    8 fargs: fargs . ',' IDENTIFIER
+
+    ')'  shift, and go to state 85
+    ','  shift, and go to state 86
+
+
+State 81
+
+   27 expression: expression . PLUS expression
+   28           | expression . MINUS expression
+   29           | expression . MULT expression
+   30           | expression . DIV expression
+   35           | expression . AND expression
+   36           | expression . OR expression
+   38           | expression . GT expression
+   39           | expression . GTE expression
+   40           | expression . LT expression
+   41           | expression . LTE expression
+   42           | expression . EQUAL expression
+   43           | expression . NEQUAL expression
+   45 args: args ',' expression .
+
+    OR      shift, and go to state 38
+    AND     shift, and go to state 39
+    NEQUAL  shift, and go to state 40
+    EQUAL   shift, and go to state 41
+    LT      shift, and go to state 42
+    LTE     shift, and go to state 43
+    GT      shift, and go to state 44
+    GTE     shift, and go to state 45
+    MINUS   shift, and go to state 46
+    PLUS    shift, and go to state 47
+    DIV     shift, and go to state 48
+    MULT    shift, and go to state 49
+
+    $default  reduce using rule 45 (args)
+
+
+State 82
+
+   16 if_statement: IF '(' expression ')' statement .
+   17             | IF '(' expression ')' statement . ELSE statement
+
+    ELSE  shift, and go to state 87
+
+    $default  reduce using rule 16 (if_statement)
+
+
+State 83
+
+   18 while_statement: WHILE '(' expression ')' statement .
+
+    $default  reduce using rule 18 (while_statement)
+
+
+State 84
+
+    6 function_definition: FUNCTION IDENTIFIER '(' ')' compound_statement .
+
+    $default  reduce using rule 6 (function_definition)
+
+
+State 85
+
+    5 function_definition: FUNCTION IDENTIFIER '(' fargs ')' . compound_statement
+
+    '{'  shift, and go to state 13
+
+    compound_statement  go to state 88
+
+
+State 86
+
+    8 fargs: fargs ',' . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 89
+
+
+State 87
+
+   17 if_statement: IF '(' expression ')' statement ELSE . statement
+
+    IDENTIFIER  shift, and go to state 1
+    NUMBER      shift, and go to state 2
+    RETURN      shift, and go to state 3
+    BREAK       shift, and go to state 4
+    IF          shift, and go to state 5
+    WHILE       shift, and go to state 6
+    MINUS       shift, and go to state 8
+    PLUS        shift, and go to state 9
+    NOT         shift, and go to state 10
+    '('         shift, and go to state 11
+    ';'         shift, and go to state 12
+    '{'         shift, and go to state 13
+
+    statement           go to state 90
+    if_statement        go to state 17
+    while_statement     go to state 18
+    compound_statement  go to state 19
+    expression          go to state 20
+
+
+State 88
+
+    5 function_definition: FUNCTION IDENTIFIER '(' fargs ')' compound_statement .
+
+    $default  reduce using rule 5 (function_definition)
+
+
+State 89
+
+    8 fargs: fargs ',' IDENTIFIER .
+
+    $default  reduce using rule 8 (fargs)
+
+
+State 90
+
+   17 if_statement: IF '(' expression ')' statement ELSE statement .
+
+    $default  reduce using rule 17 (if_statement)

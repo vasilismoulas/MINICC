@@ -1,0 +1,1 @@
+function square(x,y) {i=0;fact = 0; return x;}fact =square(4,2);
